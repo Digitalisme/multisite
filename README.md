@@ -1,5 +1,4 @@
-# multisite
-Multisite is a blog with different subdomain
+# Masih banyak bug nya bro wwkwokwoawokw
 
 # Sistem Blog Multi-User
 
