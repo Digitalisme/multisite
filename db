@@ -1,0 +1,166 @@
+-- Buat user admin
+INSERT INTO users (email, password) VALUES 
+('admin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'); -- password: password
+
+-- Ambil user_id yang baru dibuat
+SET @user_id = LAST_INSERT_ID();
+
+-- Buat site/blog
+INSERT INTO sites (subdomain, site_name, email, user_id, status) VALUES
+('blog1', 'Blog Pertama Saya', 'admin@example.com', @user_id, 'active');
+
+-- Ambil site_id yang baru dibuat
+SET @site_id = LAST_INSERT_ID();
+
+-- Buat beberapa kategori
+INSERT INTO categories (site_id, name, slug) VALUES
+(@site_id, 'Teknologi', 'teknologi'),
+(@site_id, 'Tutorial', 'tutorial');
+
+-- Ambil category_id
+SET @cat_tech_id = LAST_INSERT_ID();
+SET @cat_tutorial_id = LAST_INSERT_ID() + 1;
+
+-- Buat beberapa posting
+INSERT INTO posts (site_id, title, content) VALUES
+(@site_id, 'Selamat Datang di Blog Saya', '<p>Halo semua! Ini adalah posting pertama di blog saya. Saya akan berbagi tentang teknologi, pemrograman, dan hal-hal menarik lainnya.</p><p>Stay tuned untuk konten-konten menarik berikutnya!</p>'),
+(@site_id, 'Tutorial PHP untuk Pemula', '<h2>Pengenalan PHP</h2><p>PHP adalah bahasa pemrograman server-side yang sangat populer untuk pengembangan web. Dalam tutorial ini, kita akan belajar dasar-dasar PHP.</p><h3>Apa itu PHP?</h3><p>PHP (PHP: Hypertext Preprocessor) adalah bahasa pemrograman yang berjalan di server. PHP dapat menghasilkan konten dinamis, bekerja dengan database, mengolah form, dan banyak lagi.</p><h3>Contoh Kode PHP Sederhana:</h3><pre><code>&lt;?php\necho "Hello, World!";\n?&gt;</code></pre><p>Tutorial ini akan terus diperbarui. Jangan lupa untuk mengikuti blog ini!</p>');
+
+-- Ambil post_id yang baru dibuat
+SET @post1_id = LAST_INSERT_ID();
+SET @post2_id = LAST_INSERT_ID() + 1;
+
+-- Hubungkan posting dengan kategori
+INSERT INTO post_categories (post_id, category_id) VALUES
+(@post1_id, @cat_tech_id),
+(@post2_id, @cat_tech_id),
+(@post2_id, @cat_tutorial_id);
+
+-- Buat beberapa tag
+INSERT INTO tags (site_id, name, slug) VALUES
+(@site_id, 'PHP', 'php'),
+(@site_id, 'Web Development', 'web-development'),
+(@site_id, 'Programming', 'programming');
+
+-- Ambil tag_id
+SET @tag1_id = LAST_INSERT_ID();
+SET @tag2_id = LAST_INSERT_ID() + 1;
+SET @tag3_id = LAST_INSERT_ID() + 2;
+
+-- Hubungkan posting dengan tag
+INSERT INTO post_tags (post_id, tag_id) VALUES
+(@post1_id, @tag2_id),
+(@post1_id, @tag3_id),
+(@post2_id, @tag1_id),
+(@post2_id, @tag2_id);
+
+
+
+-- Gunakan user_id yang sudah ada (dari admin sebelumnya)
+SELECT @user_id := id FROM users WHERE email = 'admin@example.com';
+
+-- Buat site/blog kedua
+INSERT INTO sites (subdomain, site_name, email, user_id, status) VALUES
+('blog2', 'Blog Kuliner Indonesia', 'admin@example.com', @user_id, 'active');
+
+-- Ambil site_id yang baru dibuat
+SET @site_id = LAST_INSERT_ID();
+
+-- Buat kategori untuk blog kuliner
+INSERT INTO categories (site_id, name, slug) VALUES
+(@site_id, 'Resep Masakan', 'resep-masakan'),
+(@site_id, 'Tips Memasak', 'tips-memasak'),
+(@site_id, 'Review Restoran', 'review-restoran');
+
+-- Ambil category_id
+SET @cat_resep_id = LAST_INSERT_ID();
+SET @cat_tips_id = LAST_INSERT_ID() + 1;
+SET @cat_review_id = LAST_INSERT_ID() + 2;
+
+-- Buat posting kuliner
+INSERT INTO posts (site_id, title, content) VALUES
+(@site_id, 'Resep Nasi Goreng Spesial', 
+'<h2>Nasi Goreng Spesial ala Restaurant</h2>
+<p>Nasi goreng adalah makanan khas Indonesia yang sangat populer. Berikut resep nasi goreng spesial yang bisa Anda coba di rumah.</p>
+
+<h3>Bahan-bahan:</h3>
+<ul>
+    <li>3 piring nasi putih</li>
+    <li>3 siung bawang putih</li>
+    <li>5 siung bawang merah</li>
+    <li>2 butir telur</li>
+    <li>100g ayam potong dadu</li>
+    <li>2 sdm kecap manis</li>
+    <li>Garam dan merica secukupnya</li>
+</ul>
+
+<h3>Cara Membuat:</h3>
+<ol>
+    <li>Haluskan bawang putih dan bawang merah</li>
+    <li>Tumis bumbu halus hingga harum</li>
+    <li>Masukkan ayam, masak hingga matang</li>
+    <li>Sisihkan di pinggir wajan, masukkan telur, orak-arik</li>
+    <li>Masukkan nasi putih, kecap manis, garam, dan merica</li>
+    <li>Aduk rata hingga semua bumbu tercampur</li>
+</ol>
+
+<p>Sajikan hangat dengan telur mata sapi, acar, dan kerupuk. Selamat mencoba!</p>'),
+
+(@site_id, 'Review: Warung Sate Pak Slamet', 
+'<h2>Warung Sate Pak Slamet: Surga Pecinta Sate</h2>
+
+<p>Hari ini saya berkesempatan mengunjungi salah satu warung sate legendaris di kota ini, Warung Sate Pak Slamet yang terletak di Jalan Kenanga No. 45.</p>
+
+<h3>Suasana</h3>
+<p>Meski sederhana, warung ini selalu ramai pengunjung. Tempat duduk tertata rapi dengan kebersihan yang terjaga. Aroma sate yang dipanggang mengundang selera siapa saja yang lewat.</p>
+
+<h3>Menu dan Harga</h3>
+<ul>
+    <li>Sate Ayam (10 tusuk): Rp 25.000</li>
+    <li>Sate Kambing (10 tusuk): Rp 35.000</li>
+    <li>Sate Sapi (10 tusuk): Rp 40.000</li>
+    <li>Nasi Putih: Rp 5.000</li>
+    <li>Es Teh Manis: Rp 3.000</li>
+</ul>
+
+<h3>Rasa dan Penyajian</h3>
+<p>Sate disajikan dengan bumbu kacang yang kental dan gurih. Daging empuk dan dipotong dengan ukuran yang pas. Bumbu marinasi meresap sempurna. Yang istimewa adalah sambal kecap dengan potongan bawang merah dan cabai rawit yang menggugah selera.</p>
+
+<h3>Kesimpulan</h3>
+<p>Rating: ⭐⭐⭐⭐½ (4.5/5)<br>
+Warung Sate Pak Slamet membuktikan bahwa makanan sederhana bisa menjadi luar biasa jika diolah dengan passion dan konsistensi kualitas.</p>
+
+<p><em>Alamat: Jl. Kenanga No. 45<br>
+Buka: 16.00 - 22.00 WIB<br>
+Hari Libur: Senin</em></p>');
+
+-- Ambil post_id yang baru dibuat
+SET @post1_id = LAST_INSERT_ID();
+SET @post2_id = LAST_INSERT_ID() + 1;
+
+-- Hubungkan posting dengan kategori
+INSERT INTO post_categories (post_id, category_id) VALUES
+(@post1_id, @cat_resep_id),
+(@post1_id, @cat_tips_id),
+(@post2_id, @cat_review_id);
+
+-- Buat tag untuk blog kuliner
+INSERT INTO tags (site_id, name, slug) VALUES
+(@site_id, 'Kuliner', 'kuliner'),
+(@site_id, 'Masakan Indonesia', 'masakan-indonesia'),
+(@site_id, 'Review', 'review'),
+(@site_id, 'Resep', 'resep');
+
+-- Ambil tag_id
+SET @tag1_id = LAST_INSERT_ID();
+SET @tag2_id = LAST_INSERT_ID() + 1;
+SET @tag3_id = LAST_INSERT_ID() + 2;
+SET @tag4_id = LAST_INSERT_ID() + 3;
+
+-- Hubungkan posting dengan tag
+INSERT INTO post_tags (post_id, tag_id) VALUES
+(@post1_id, @tag1_id),
+(@post1_id, @tag2_id),
+(@post1_id, @tag4_id),
+(@post2_id, @tag1_id),
+(@post2_id, @tag3_id);

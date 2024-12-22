@@ -1,0 +1,5 @@
+RewriteEngine On
+Options -Indexes +FollowSymLinks
+
+# Prevent directory listing
+IndexIgnore * 
